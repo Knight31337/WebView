@@ -1,0 +1,15 @@
+{
+  "appName": "My App",
+  "appId": "com.example.myapp",
+  "webUrl": "https://example.com",
+  "backgroundColor": "#ffffff",
+  "statusBarStyle": "dark",
+  "statusBarColor": "#ffffff",
+  "splashScreenDuration": 2000,
+  "allowNavigation": ["example.com", "*.example.com"],
+  "orientation": "portrait",
+  "userAgent": "",
+  "allowBackButton": true,
+  "allowZoom": false,
+  "offlineMessage": "No internet connection. Please check your network and try again."
+}

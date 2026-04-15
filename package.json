@@ -1,0 +1,38 @@
+{
+  "name": "webview-wrapper",
+  "version": "1.0.0",
+  "description": "WebView wrapper app template — change app.config.json and deploy to iOS/Android",
+  "main": "index.js",
+  "scripts": {
+    "init:ios": "npx cap add ios",
+    "init:android": "npx cap add android",
+    "init:all": "npm run init:ios && npm run init:android",
+    "sync": "npx cap sync",
+    "open:ios": "npx cap open ios",
+    "open:android": "npx cap open android",
+    "build:ios": "npx cap sync ios && npx cap open ios",
+    "build:android": "npx cap sync android && npx cap open android",
+    "build:all": "npx cap sync"
+  },
+  "keywords": [
+    "webview",
+    "capacitor",
+    "wrapper",
+    "hybrid"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "^8.3.0",
+    "@capacitor/cli": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
+    "@capacitor/ios": "^8.3.0",
+    "@capacitor/keyboard": "^8.0.3",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.2"
+  }
+}
