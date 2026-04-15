@@ -1,77 +1,58 @@
-import { SplashScreen } from '@capacitor/splash-screen';
-import { StatusBar } from '@capacitor/status-bar';
-import { Keyboard } from '@capacitor/keyboard';
-import { Capacitor } from '@capacitor/core';
+// Minimal fallback shell — only runs if the remote URL fails to load.
+// When server.url is set in capacitor.config, Capacitor loads the remote
+// site directly in the WebView. This page is a safety net.
 
-// Initialize the app shell
-document.addEventListener('DOMContentLoaded', async () => {
-  const platform = Capacitor.getPlatform();
-
-  // Configure status bar on native platforms
-  if (platform !== 'web') {
-    try {
-      await StatusBar.setOverlaysWebView({ overlay: false });
-    } catch (e) {
-      // Status bar plugin may not be available
-    }
-  }
-
+document.addEventListener('DOMContentLoaded', function () {
   // Handle offline state
   if (!navigator.onLine) {
     showOffline();
   }
 
-  window.addEventListener('online', () => {
+  window.addEventListener('online', function () {
     document.getElementById('offline').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
     location.reload();
   });
 
-  window.addEventListener('offline', () => {
+  window.addEventListener('offline', function () {
     showOffline();
   });
 
-  // Hide splash screen once ready
-  if (platform !== 'web') {
+  // Best-effort push notification registration via Capacitor bridge.
+  // This runs briefly before the WebView navigates to the remote URL.
+  // The native layer handles registration as the primary mechanism.
+  if (window.Capacitor && window.Capacitor.isNativePlatform()) {
     try {
-      await SplashScreen.hide();
-    } catch (e) {
-      // Splash screen plugin may not be available
-    }
-  }
-
-  // Handle Android back button
-  if (platform === 'android') {
-    document.addEventListener('backbutton', () => {
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        // Let the app exit
-        navigator.app?.exitApp?.();
+      var PushNotifications = window.Capacitor.Plugins.PushNotifications;
+      if (PushNotifications) {
+        PushNotifications.requestPermissions().then(function (result) {
+          if (result.receive === 'granted') {
+            PushNotifications.register();
+          }
+        });
+        PushNotifications.addListener('registration', function (token) {
+          console.log('Push registration token:', token.value);
+        });
+        PushNotifications.addListener('registrationError', function (err) {
+          console.error('Push registration error:', err.error);
+        });
+        PushNotifications.addListener('pushNotificationReceived', function (notification) {
+          console.log('Push received:', notification.title);
+        });
+        PushNotifications.addListener('pushNotificationActionPerformed', function (notification) {
+          console.log('Push action:', notification.actionId);
+        });
       }
-    });
-  }
-
-  // Handle keyboard on iOS
-  if (platform === 'ios') {
-    try {
-      Keyboard.addListener('keyboardWillShow', () => {
-        document.body.classList.add('keyboard-open');
-      });
-      Keyboard.addListener('keyboardWillHide', () => {
-        document.body.classList.remove('keyboard-open');
-      });
     } catch (e) {
-      // Keyboard plugin may not be available
+      // Plugin may not be available — native side handles it
     }
   }
 });
 
 function showOffline() {
   document.getElementById('loading').style.display = 'none';
-  const offlineEl = document.getElementById('offline');
+  var offlineEl = document.getElementById('offline');
   offlineEl.style.display = 'block';
-  // Message is set from app.config.json via capacitor config at build time
   document.getElementById('offline-message').textContent =
     'No internet connection. Please check your network and try again.';
 }

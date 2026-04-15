@@ -1,15 +1,22 @@
 {
-  "appName": "My App",
-  "appId": "com.example.myapp",
-  "webUrl": "https://example.com",
+  "appName": "YouTube Channel",
+  "appId": "com.example.youtubechannel",
+  "webUrl": "https://www.youtube.com/channel/UCVDbBW-jdj35E7AM9MCHexw",
   "backgroundColor": "#ffffff",
   "statusBarStyle": "dark",
   "statusBarColor": "#ffffff",
   "splashScreenDuration": 2000,
-  "allowNavigation": ["example.com", "*.example.com"],
+  "allowNavigation": ["youtube.com", "*.youtube.com", "*.googlevideo.com", "*.ytimg.com", "accounts.google.com"],
   "orientation": "portrait",
   "userAgent": "",
   "allowBackButton": true,
   "allowZoom": false,
-  "offlineMessage": "No internet connection. Please check your network and try again."
+  "offlineMessage": "No internet connection. Please check your network and try again.",
+  "notifications": {
+    "pullEnabled": true,
+    "pullEndpointPath": "/notifications.json",
+    "pullIntervalMinutes": 15,
+    "pushEnabled": true,
+    "pushTokenEndpoint": ""
+  }
 }

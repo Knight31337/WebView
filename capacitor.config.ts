@@ -9,6 +9,7 @@ const config: CapacitorConfig = {
     url: appConfig.webUrl,
     cleartext: true,
     allowNavigation: appConfig.allowNavigation,
+    androidScheme: 'https',
   },
   plugins: {
     SplashScreen: {
@@ -25,19 +26,32 @@ const config: CapacitorConfig = {
       resize: 'body',
       resizeOnFullScreen: true,
     },
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound', 'alert'],
+    },
+    LocalNotifications: {
+      smallIcon: 'ic_stat_icon_config_sample',
+      iconColor: '#488AFF',
+      sound: 'default',
+    },
   },
   ios: {
     contentInset: 'automatic',
     allowsLinkPreview: false,
     scrollEnabled: true,
     backgroundColor: appConfig.backgroundColor,
+    limitsNavigationsToAppBoundDomains: false,
   },
   android: {
     backgroundColor: appConfig.backgroundColor,
     allowMixedContent: false,
     captureInput: true,
     webContentsDebuggingEnabled: false,
+    initialFocus: true,
   },
-};
+} as any;
+
+// Pass notification config through so native code can read it from capacitor.config.json
+(config as any).notifications = appConfig.notifications;
 
 export default config;
